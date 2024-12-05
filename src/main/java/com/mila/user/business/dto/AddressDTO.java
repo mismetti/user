@@ -11,6 +11,7 @@ import lombok.*;
 @Builder
 public class AddressDTO {
 
+    private Long id;
     private String streetLine1;
     private Long number;
     private String streetLine2;
