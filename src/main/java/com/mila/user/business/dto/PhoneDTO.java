@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class PhoneDTO {
-
+    private Long id;
     private String phonenumber;
     private String ddi;
     private String ddd;

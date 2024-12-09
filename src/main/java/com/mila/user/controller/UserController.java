@@ -1,6 +1,8 @@
 package com.mila.user.controller;
 
 import com.mila.user.business.UserService;
+import com.mila.user.business.dto.AddressDTO;
+import com.mila.user.business.dto.PhoneDTO;
 import com.mila.user.business.dto.UserDTO;
 import com.mila.user.infrastructure.entity.User;
 import com.mila.user.security.JwtUtil;
@@ -35,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<User> searchUserByEmail(@RequestParam("email") String email){
+    public ResponseEntity<UserDTO> searchUserByEmail(@RequestParam("email") String email){
         return ResponseEntity.ok(userService.searchUserByEmail(email));
     }
 
@@ -45,4 +47,33 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping
+    public ResponseEntity<UserDTO> updateUserData(@RequestBody UserDTO dto,
+                                                  @RequestHeader("Authorization")String token){
+        return ResponseEntity.ok(userService.refreshUserData(token, dto));
+    }
+
+    @PutMapping("/address")
+    public ResponseEntity<AddressDTO> updateAddress(@RequestBody AddressDTO dto,
+                                                    @RequestParam("id") Long id){
+        return ResponseEntity.ok(userService.updateAddress(id, dto));
+    }
+
+    @PutMapping("/phone")
+    public ResponseEntity<PhoneDTO> updatePhone(@RequestBody PhoneDTO dto,
+                                                  @RequestParam("id") Long id){
+        return ResponseEntity.ok(userService.updatePhone(id, dto));
+    }
+
+    @PostMapping("/address")
+    public ResponseEntity<AddressDTO> registerAddress(@RequestBody AddressDTO dto,
+                                                      @RequestHeader("Authorization")String token){
+        return ResponseEntity.ok(userService.insertAddress(token,dto));
+    }
+
+    @PostMapping("/phone")
+    public ResponseEntity<PhoneDTO> registerPhone(@RequestBody PhoneDTO dto,
+                                                      @RequestHeader("Authorization")String token){
+        return ResponseEntity.ok(userService.insertPhone(token,dto));
+    }
 }

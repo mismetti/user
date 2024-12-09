@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 public class UserConverter {
 
-    public User toUser(UserDTO userDTO){
+    public User toUser(UserDTO userDTO) {
         return User.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
@@ -27,7 +27,7 @@ public class UserConverter {
         return addressDTOS.stream().map(this::toAddress).toList();
     }
 
-    public Address toAddress (AddressDTO addressDTO){
+    public Address toAddress(AddressDTO addressDTO) {
         return Address.builder()
                 .streetLine1(addressDTO.getStreetLine1())
                 .number(addressDTO.getNumber())
@@ -42,7 +42,7 @@ public class UserConverter {
         return phoneDTOS.stream().map(this::toPhone).toList();
     }
 
-    public Phone toPhone(PhoneDTO phoneDTO){
+    public Phone toPhone(PhoneDTO phoneDTO) {
         return Phone.builder()
                 .phonenumber(phoneDTO.getPhonenumber())
                 .ddd(phoneDTO.getDdd())
@@ -52,7 +52,7 @@ public class UserConverter {
 
 /////
 
-    public UserDTO toUserDTO(User user){
+    public UserDTO toUserDTO(User user) {
         return UserDTO.builder()
                 .name(user.getName())
                 .email(user.getEmail())
@@ -66,8 +66,9 @@ public class UserConverter {
         return address.stream().map(this::toAddressDTO).toList();
     }
 
-    public AddressDTO toAddressDTO (Address address){
+    public AddressDTO toAddressDTO(Address address) {
         return AddressDTO.builder()
+                .id(address.getId())
                 .streetLine1(address.getStreetLine1())
                 .number(address.getNumber())
                 .city(address.getCity())
@@ -81,13 +82,65 @@ public class UserConverter {
         return phones.stream().map(this::toPhoneDTO).toList();
     }
 
-    public PhoneDTO toPhoneDTO(Phone phone){
+    public PhoneDTO toPhoneDTO(Phone phone) {
         return PhoneDTO.builder()
+                .id(phone.getId())
                 .phonenumber(phone.getPhonenumber())
                 .ddd(phone.getDdd())
                 .ddi(phone.getDdi())
                 .build();
     }
 
+    public User updateUser(UserDTO userDTO, User entity) {
+        return User.builder()
+                .name(userDTO.getName() != null ? userDTO.getName() : entity.getName())
+                .id(entity.getId())
+                .password(userDTO.getPassword() != null ? userDTO.getPassword() : entity.getPassword())
+                .email(userDTO.getEmail() != null ? userDTO.getEmail() : entity.getEmail())
+                .addresses(entity.getAddresses())
+                .phones(entity.getPhones())
+                .build();
 
+    }
+
+    public Address updateAddress(AddressDTO dto, Address entity){
+        return Address.builder()
+                .id(entity.getId())
+                .streetLine1(dto.getStreetLine1() != null ? dto.getStreetLine1() : entity.getStreetLine1())
+                .streetLine2(dto.getStreetLine2() != null ? dto.getStreetLine2() : entity.getStreetLine2())
+                .number(dto.getNumber() != null ? dto.getNumber() : entity.getNumber())
+                .city(dto.getCity() != null ? dto.getCity() : entity.getCity())
+                .state(dto.getState() != null ? dto.getState() :  entity.getState())
+                .zipcode(dto.getZipcode() != null ? dto.getZipcode() : entity.getZipcode())
+                .build();
+    }
+
+    public Phone updatePhone(PhoneDTO dto, Phone entity){
+        return Phone.builder()
+                .id(entity.getId())
+                .ddd(dto.getDdd() != null ? dto.getDdd() : entity.getDdd())
+                .ddi(dto.getDdi() != null ? dto.getDdi() : entity.getDdi())
+                .phonenumber(dto.getPhonenumber() != null ? dto.getPhonenumber() : entity.getPhonenumber())
+                .build();
+    }
+
+    public Address toAddressEntity(AddressDTO dto, Long idUser){
+        return Address.builder()
+                .streetLine1(dto.getStreetLine1())
+                .city(dto.getCity())
+                .zipcode(dto.getZipcode())
+                .streetLine2(dto.getStreetLine2())
+                .state(dto.getState())
+                .number(dto.getNumber())
+                .user_id(idUser)
+                .build();
+    }
+
+    public Phone toPhoneEntity(PhoneDTO dto, Long idUser){
+        return Phone.builder()
+                .phonenumber(dto.getPhonenumber())
+                .ddd(dto.getPhonenumber())
+                .user_id(idUser)
+                .build();
+    }
 }
